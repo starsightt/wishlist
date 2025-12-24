@@ -1,0 +1,2064 @@
+<!doctype doctype>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist - Personal Wishlist Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      min-height: 100%;
+      overflow-y: auto;
+    }
+
+    /* Login & Register Page */
+    .auth-page {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 440px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 5px rgba(139, 0, 0, 0.5), 0 0 10px rgba(139, 0, 0, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(139, 0, 0, 0.8), 0 0 30px rgba(139, 0, 0, 0.5);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 32px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .auth-logo h1 {
+      color: #4A0404;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #4A0404 0%, #8B0000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .auth-logo p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #4A0404;
+      box-shadow: 0 0 0 4px rgba(74, 4, 4, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: #4A0404;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(74, 4, 4, 0.4);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #6B0505 0%, #8B0000 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(74, 4, 4, 0.5);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(74, 4, 4, 0.4);
+    }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 24px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .auth-switch a {
+      color: #4A0404;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .auth-switch a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #4A0404, #8B0000);
+      transition: width 0.3s ease;
+    }
+
+    .auth-switch a:hover {
+      color: #6B0505;
+    }
+
+    .auth-switch a:hover::after {
+      width: 100%;
+    }
+
+    .error-message {
+      background: #FFE5E5;
+      color: #C00000;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .success-message {
+      background: #E5F5E5;
+      color: #008000;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* Main App Layout */
+    .main-app {
+      display: none;
+      width: 100%;
+      min-height: 100%;
+      background: linear-gradient(135deg, #2A0202 0%, #4A0404 50%, #3D0303 100%);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      padding: 20px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid #8B0000;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo h1 {
+      color: white;
+      font-size: 28px;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .btn-dark-mode {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 12px 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+      font-size: 18px;
+    }
+
+    .btn-dark-mode:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px) rotate(20deg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .total-price {
+      background: linear-gradient(135deg, #8B0000 0%, #A00000 100%);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 6px 20px rgba(139, 0, 0, 0.5);
+      animation: pulse 2s ease-in-out infinite;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .total-price::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s linear infinite;
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 12px 24px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      animation: slideInLeft 0.4s ease-out;
+    }
+
+    .breadcrumb-item {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .breadcrumb-item:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(3px);
+    }
+
+    .breadcrumb-item.active {
+      color: white;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .breadcrumb-separator {
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: bold;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+    .page-title {
+      font-size: 36px;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn-add {
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(74, 4, 4, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-add::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-add:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-add:hover {
+      background: linear-gradient(135deg, #6B0505 0%, #8B0000 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(74, 4, 4, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #4A0404;
+      padding: 14px 28px;
+      border: 2px solid #4A0404;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      transition: left 0.4s ease;
+      z-index: -1;
+    }
+
+    .btn-secondary:hover::before {
+      left: 0;
+    }
+
+    .btn-secondary:hover {
+      color: white;
+      border-color: #4A0404;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(74, 4, 4, 0.3);
+    }
+
+    /* Category Grid */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(139, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      animation: fadeIn 0.6s ease-out backwards;
+      border: 2px solid transparent;
+    }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(74, 4, 4, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .category-card::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #4A0404, #8B0000, #4A0404);
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      background-size: 300% 300%;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    .category-card:hover::after {
+      opacity: 1;
+    }
+
+    .category-card:hover::before {
+      opacity: 1;
+    }
+
+    .category-card:hover {
+      transform: translateY(-15px) scale(1.03) rotate(1deg);
+      box-shadow: 0 25px 50px rgba(139, 0, 0, 0.4);
+    }
+
+    .category-cover {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 50%, #8B0000 100%);
+      transition: transform 0.5s ease;
+      position: relative;
+    }
+
+    .category-card:hover .category-cover {
+      transform: scale(1.1);
+    }
+
+    .category-info {
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .category-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      transition: color 0.3s ease;
+    }
+
+    .category-card:hover .category-name {
+      color: #4A0404;
+    }
+
+    .category-total {
+      color: #4A0404;
+      font-weight: 700;
+      font-size: 19px;
+      background: linear-gradient(135deg, #4A0404 0%, #8B0000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .category-actions {
+      padding: 0 20px 20px;
+      display: flex;
+      gap: 8px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-icon {
+      background: #F5F5F5;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 12px;
+      font-family: 'Poppins', sans-serif;
+      color: #666;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-icon:hover {
+      background: #4A0404;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(74, 4, 4, 0.3);
+    }
+
+    /* Item Grid */
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .item-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(139, 0, 0, 0.3);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: fadeIn 0.6s ease-out backwards;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .item-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, #4A0404, #8B0000, #A00000);
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .item-card:hover::before {
+      opacity: 1;
+    }
+
+    .item-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(74, 4, 4, 0.05) 0%, rgba(139, 0, 0, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .item-card.purchased {
+      opacity: 0.7;
+      filter: grayscale(0.3);
+    }
+
+    .item-card:hover::after {
+      opacity: 1;
+    }
+
+    .item-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(139, 0, 0, 0.4);
+    }
+
+    .item-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #F5F5F5;
+    }
+
+    .item-content {
+      padding: 16px;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .item-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      flex: 1;
+    }
+
+    .priority-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    .priority-very-important {
+      background: #FFE5E5;
+      color: #C00000;
+    }
+
+    .priority-important {
+      background: #FFF3E5;
+      color: #FF8C00;
+    }
+
+    .priority-medium {
+      background: #E5F0FF;
+      color: #0066CC;
+    }
+
+    .priority-low {
+      background: #F0F0F0;
+      color: #666;
+    }
+
+    .item-description {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .item-price {
+      color: #4A0404;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #4A0404 0%, #8B0000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-buy {
+      flex: 1;
+      background: linear-gradient(135deg, #4A0404 0%, #8B0000 100%);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(74, 4, 4, 0.4);
+    }
+
+    .btn-buy::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-buy:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-buy:hover {
+      background: linear-gradient(135deg, #6B0505 0%, #A00000 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(74, 4, 4, 0.6);
+    }
+
+    .btn-buy:active {
+      transform: translateY(0);
+    }
+
+    .checkbox-purchased {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .checkbox-purchased input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 540px;
+      max-height: 90%;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease-out;
+    }
+
+    @keyframes modalSlide {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      resize: vertical;
+      min-height: 80px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #8B0000;
+      box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.1);
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-group select:focus {
+      outline: none;
+      border-color: #8B0000;
+      box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.1);
+    }
+
+    .image-upload-container {
+      width: 100%;
+    }
+
+    .image-upload {
+      display: block;
+      width: 100%;
+      padding: 40px;
+      border: 3px dashed #E5E5E5;
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      background: #FAFAFA;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-upload::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(74, 4, 4, 0.1) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+      border-radius: 50%;
+    }
+
+    .image-upload:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+
+    .image-upload:hover {
+      border-color: #4A0404;
+      background: #FFF8F8;
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(74, 4, 4, 0.15);
+    }
+
+    .image-upload input {
+      display: none;
+    }
+
+    .image-preview {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      animation: fadeIn 0.5s ease-out;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #categoryCoverPlaceholder, #itemImagePlaceholder {
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .image-upload:hover #categoryCoverPlaceholder,
+    .image-upload:hover #itemImagePlaceholder {
+      transform: scale(1.05);
+      color: #4A0404;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+    .btn-cancel {
+      background: #F5F5F5;
+      color: #333;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+    }
+
+    .btn-cancel:hover {
+      background: #E5E5E5;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode .category-card {
+      background: linear-gradient(135deg, #1A0000 0%, #2D0505 100%);
+      border: 2px solid rgba(139, 0, 0, 0.3);
+    }
+
+    body.dark-mode .category-card:hover {
+      border-color: rgba(139, 0, 0, 0.6);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    body.dark-mode .category-name {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    body.dark-mode .category-card:hover .category-name {
+      color: white;
+    }
+
+    body.dark-mode .item-card {
+      background: linear-gradient(135deg, #1A0000 0%, #2D0505 100%);
+      border: 2px solid rgba(139, 0, 0, 0.3);
+    }
+
+    body.dark-mode .item-card:hover {
+      border-color: rgba(139, 0, 0, 0.6);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    body.dark-mode .item-name {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    body.dark-mode .item-description {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    body.dark-mode .checkbox-purchased {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode .modal-content {
+      background: linear-gradient(135deg, #1A0000 0%, #2D0505 100%);
+      border: 2px solid rgba(139, 0, 0, 0.5);
+    }
+
+    body.dark-mode .modal-title {
+      color: white;
+    }
+
+    body.dark-mode .form-group label {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group textarea,
+    body.dark-mode .form-group select {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(139, 0, 0, 0.4);
+      color: white;
+    }
+
+    body.dark-mode .form-group input::placeholder,
+    body.dark-mode .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    body.dark-mode .form-group input:focus,
+    body.dark-mode .form-group textarea:focus,
+    body.dark-mode .form-group select:focus {
+      border-color: #8B0000;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark-mode .image-upload {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(139, 0, 0, 0.4);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode .image-upload:hover {
+      background: rgba(0, 0, 0, 0.4);
+      border-color: #8B0000;
+    }
+
+    body.dark-mode #categoryCoverPlaceholder,
+    body.dark-mode #itemImagePlaceholder {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode .btn-cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark-mode .btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    body.dark-mode .btn-icon {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode .modal-close {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    body.dark-mode .modal-close:hover {
+      color: white;
+    }
+
+    body.dark-mode .password-toggle {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    body.dark-mode .password-toggle:hover {
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .auth-card {
+        padding: 32px 24px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .header-info {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .total-price {
+        text-align: center;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .item-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 24px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-container"><!-- Auth Page -->
+   <div id="authPage" class="auth-page">
+    <div class="auth-card">
+     <div class="auth-logo">
+      <h1>✨ My Wishlist</h1>
+      <p>Kelola wishlist Anda dengan mudah</p>
+     </div>
+     <div id="errorMessage" class="error-message"></div>
+     <div id="successMessage" class="success-message"></div><!-- Login Form -->
+     <form id="loginForm">
+      <div class="form-group"><label for="loginUsername">Username</label> <input type="text" id="loginUsername" placeholder="Masukkan username Anda" required>
+      </div>
+      <div class="form-group"><label for="loginPassword">Password</label>
+       <div class="password-wrapper"><input type="password" id="loginPassword" placeholder="Masukkan password Anda" required> <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">👁️</button>
+       </div>
+      </div><button type="submit" class="btn-primary">Masuk</button>
+      <div class="auth-switch">
+       Belum punya akun? <a id="showRegister">Daftar di sini</a>
+      </div>
+     </form><!-- Register Form -->
+     <form id="registerForm" style="display: none;">
+      <div class="form-group"><label for="registerUsername">Username</label> <input type="text" id="registerUsername" placeholder="Pilih username unik" required>
+      </div>
+      <div class="form-group"><label for="registerPassword">Password</label>
+       <div class="password-wrapper"><input type="password" id="registerPassword" placeholder="Buat password yang kuat" required> <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">👁️</button>
+       </div>
+      </div>
+      <div class="form-group"><label for="registerConfirmPassword">Konfirmasi Password</label>
+       <div class="password-wrapper"><input type="password" id="registerConfirmPassword" placeholder="Masukkan ulang password" required> <button type="button" class="password-toggle" onclick="togglePassword('registerConfirmPassword', this)">👁️</button>
+       </div>
+      </div><button type="submit" class="btn-primary">Daftar</button>
+      <div class="auth-switch">
+       Sudah punya akun? <a id="showLogin">Masuk di sini</a>
+      </div>
+     </form>
+    </div>
+   </div><!-- Main App -->
+   <div id="mainApp" class="main-app"><!-- Header -->
+    <header class="header">
+     <div class="header-content">
+      <div class="header-logo">
+       <h1>✨ My Wishlist</h1>
+      </div>
+      <div class="header-info"><button class="btn-dark-mode" id="btnDarkMode" title="Toggle Dark Mode">🌙</button>
+       <div class="total-price">
+        Total: <span id="totalPrice">Rp 0</span>
+       </div><button class="btn-logout" id="btnLogout">Keluar</button>
+      </div>
+     </div>
+    </header><!-- Main Content -->
+    <main class="main-content"><!-- Breadcrumb -->
+     <div class="breadcrumb" id="breadcrumb"></div><!-- Page Header -->
+     <div class="page-header">
+      <h2 class="page-title" id="pageTitle">Kategori Saya</h2>
+      <p class="page-subtitle" id="pageSubtitle">Kelola wishlist Anda berdasarkan kategori</p>
+     </div><!-- Action Buttons -->
+     <div class="action-buttons" id="actionButtons"><button class="btn-add" id="btnAddCategory">+ Tambah Kategori</button>
+     </div><!-- Categories Grid -->
+     <div class="category-grid" id="categoryGrid"></div><!-- Items Grid -->
+     <div class="item-grid" id="itemGrid"></div><!-- Empty State -->
+     <div class="empty-state" id="emptyState" style="display: none;">
+      <h3>Belum ada data</h3>
+      <p>Mulai dengan menambahkan kategori atau barang baru</p>
+     </div>
+    </main>
+   </div><!-- Modal Add Category -->
+   <div id="modalCategory" class="modal">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h3 class="modal-title" id="modalCategoryTitle">Tambah Kategori</h3>
+     </div>
+     <form id="formCategory">
+      <div class="form-group"><label>Nama Kategori</label> <input type="text" id="categoryName" placeholder="Contoh: Pakaian, Teknologi" required>
+      </div>
+      <div class="form-group"><label>Cover Image</label>
+       <div class="image-upload-container"><label for="categoryCoverInput" class="image-upload">
+         <div id="categoryCoverPlaceholder">
+          📸 Klik untuk upload gambar<br><span style="font-size: 12px; color: #999;">atau drag &amp; drop di sini</span>
+         </div><img id="categoryCoverPreview" class="image-preview" style="display: none;"> </label> <input type="file" id="categoryCoverInput" accept="image/*">
+       </div>
+      </div>
+      <div class="modal-actions"><button type="button" class="btn-cancel" id="btnCancelCategory">Batal</button> <button type="submit" class="btn-primary">Simpan</button>
+      </div>
+     </form>
+    </div>
+   </div><!-- Modal Add Item -->
+   <div id="modalItem" class="modal">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h3 class="modal-title">Tambah Barang</h3>
+     </div>
+     <form id="formItem">
+      <div class="form-group"><label>Nama Barang</label> <input type="text" id="itemName" placeholder="Contoh: Dress Midi" required>
+      </div>
+      <div class="form-group"><label>Deskripsi / Catatan</label> <textarea id="itemDescription" placeholder="Tambahkan catatan tentang barang ini"></textarea>
+      </div>
+      <div class="form-group"><label>Harga (Rp)</label> <input type="number" id="itemPrice" placeholder="0" required min="0">
+      </div>
+      <div class="form-group"><label>Tingkat Kepentingan</label> <select id="itemPriority" required> <option value="very-important">Sangat Penting</option> <option value="important">Penting</option> <option value="medium">Tidak Terlalu Penting</option> <option value="low">Tidak Penting</option> </select>
+      </div>
+      <div class="form-group"><label>Link Pembelian</label> <input type="url" id="itemLink" placeholder="https://tokopedia.com/...">
+      </div>
+      <div class="form-group"><label>Gambar Barang</label>
+       <div class="image-upload-container"><label for="itemImageInput" class="image-upload">
+         <div id="itemImagePlaceholder">
+          📸 Klik untuk upload gambar<br><span style="font-size: 12px; color: #999;">atau drag &amp; drop di sini</span>
+         </div><img id="itemImagePreview" class="image-preview" style="display: none;"> </label> <input type="file" id="itemImageInput" accept="image/*">
+       </div>
+      </div>
+      <div class="modal-actions"><button type="button" class="btn-cancel" id="btnCancelItem">Batal</button> <button type="submit" class="btn-primary">Simpan</button>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Toggle Password Visibility
+    function togglePassword(inputId, button) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        button.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        button.textContent = '👁️';
+      }
+    }
+
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      const btn = document.getElementById('btnDarkMode');
+      
+      if (isDark) {
+        btn.textContent = '☀️';
+        localStorage.setItem('wishlist_dark_mode', 'true');
+      } else {
+        btn.textContent = '🌙';
+        localStorage.setItem('wishlist_dark_mode', 'false');
+      }
+    }
+
+    // Load dark mode preference
+    function loadDarkModePreference() {
+      const isDark = localStorage.getItem('wishlist_dark_mode') === 'true';
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        const btn = document.getElementById('btnDarkMode');
+        if (btn) btn.textContent = '☀️';
+      }
+    }
+
+    // Data Storage Manager
+    class StorageManager {
+      static getUsers() {
+        return JSON.parse(localStorage.getItem('wishlist_users') || '[]');
+      }
+
+      static saveUsers(users) {
+        localStorage.setItem('wishlist_users', JSON.stringify(users));
+      }
+
+      static getUserData(username) {
+        return JSON.parse(localStorage.getItem(`wishlist_data_${username}`) || 'null');
+      }
+
+      static saveUserData(username, data) {
+        localStorage.setItem(`wishlist_data_${username}`, JSON.stringify(data));
+      }
+
+      static getCurrentUser() {
+        return localStorage.getItem('wishlist_current_user');
+      }
+
+      static setCurrentUser(username) {
+        localStorage.setItem('wishlist_current_user', username);
+      }
+
+      static clearCurrentUser() {
+        localStorage.removeItem('wishlist_current_user');
+      }
+    }
+
+    // App State
+    let currentUser = null;
+    let userData = null;
+    let currentPath = [];
+
+    // UI Elements
+    const authPage = document.getElementById('authPage');
+    const mainApp = document.getElementById('mainApp');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const showRegisterBtn = document.getElementById('showRegister');
+    const showLoginBtn = document.getElementById('showLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const actionButtons = document.getElementById('actionButtons');
+    const categoryGrid = document.getElementById('categoryGrid');
+    const itemGrid = document.getElementById('itemGrid');
+    const emptyState = document.getElementById('emptyState');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalItem = document.getElementById('modalItem');
+    const formCategory = document.getElementById('formCategory');
+    const formItem = document.getElementById('formItem');
+    const btnAddCategory = document.getElementById('btnAddCategory');
+    const btnCancelCategory = document.getElementById('btnCancelCategory');
+    const btnCancelItem = document.getElementById('btnCancelItem');
+
+    // Initialize
+    function init() {
+      loadDarkModePreference();
+      
+      const savedUser = StorageManager.getCurrentUser();
+      if (savedUser) {
+        login(savedUser);
+      } else {
+        showAuthPage();
+      }
+      setupEventListeners();
+    }
+
+    function setupEventListeners() {
+      // Auth
+      showRegisterBtn.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        clearMessages();
+      });
+
+      showLoginBtn.addEventListener('click', () => {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        clearMessages();
+      });
+
+      loginForm.addEventListener('submit', handleLogin);
+      registerForm.addEventListener('submit', handleRegister);
+      btnLogout.addEventListener('click', handleLogout);
+
+      // Dark Mode
+      const btnDarkMode = document.getElementById('btnDarkMode');
+      if (btnDarkMode) {
+        btnDarkMode.addEventListener('click', toggleDarkMode);
+      }
+
+      // Modals
+      btnAddCategory.addEventListener('click', () => openModalCategory());
+      btnCancelCategory.addEventListener('click', () => closeModal(modalCategory));
+      btnCancelItem.addEventListener('click', () => closeModal(modalItem));
+      formCategory.addEventListener('submit', handleSaveCategory);
+      formItem.addEventListener('submit', handleSaveItem);
+
+      // Image uploads
+      const categoryCoverInput = document.getElementById('categoryCoverInput');
+      const itemImageInput = document.getElementById('itemImageInput');
+
+      categoryCoverInput.addEventListener('change', (e) => {
+        handleImageUpload(e, 'categoryCoverPreview', 'categoryCoverPlaceholder');
+      });
+
+      itemImageInput.addEventListener('change', (e) => {
+        handleImageUpload(e, 'itemImagePreview', 'itemImagePlaceholder');
+      });
+
+      // Close modal on background click
+      modalCategory.addEventListener('click', (e) => {
+        if (e.target === modalCategory) closeModal(modalCategory);
+      });
+      modalItem.addEventListener('click', (e) => {
+        if (e.target === modalItem) closeModal(modalItem);
+      });
+    }
+
+    // Handle image upload and convert to base64
+    function handleImageUpload(event, previewId, placeholderId) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran gambar terlalu besar! Maksimal 2MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById(previewId);
+        const placeholder = document.getElementById(placeholderId);
+        
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Auth Functions
+    function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const users = StorageManager.getUsers();
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        login(username);
+      } else {
+        showError('Username atau password salah');
+      }
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showError('Password tidak cocok');
+        return;
+      }
+
+      const users = StorageManager.getUsers();
+      if (users.find(u => u.username === username)) {
+        showError('Username sudah digunakan');
+        return;
+      }
+
+      users.push({ username, password });
+      StorageManager.saveUsers(users);
+
+      // Initialize user data
+      const initialData = {
+        categories: [],
+        totalSpent: 0
+      };
+      StorageManager.saveUserData(username, initialData);
+
+      showSuccess('Akun berhasil dibuat! Silakan login');
+      registerForm.reset();
+      setTimeout(() => {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        clearMessages();
+      }, 1500);
+    }
+
+    function login(username) {
+      currentUser = username;
+      userData = StorageManager.getUserData(username) || {
+        categories: [],
+        totalSpent: 0
+      };
+      StorageManager.setCurrentUser(username);
+      showMainApp();
+      renderHome();
+    }
+
+    function handleLogout() {
+      StorageManager.clearCurrentUser();
+      currentUser = null;
+      userData = null;
+      currentPath = [];
+      showAuthPage();
+      loginForm.reset();
+    }
+
+    function showAuthPage() {
+      authPage.style.display = 'flex';
+      mainApp.style.display = 'none';
+    }
+
+    function showMainApp() {
+      authPage.style.display = 'none';
+      mainApp.style.display = 'block';
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+    }
+
+    function clearMessages() {
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+    }
+
+    // Navigation
+    function renderHome() {
+      currentPath = [];
+      updateBreadcrumb();
+      pageTitle.textContent = 'Kategori Saya';
+      pageSubtitle.textContent = 'Kelola wishlist Anda berdasarkan kategori';
+      
+      actionButtons.innerHTML = `
+        <button class="btn-add" onclick="openModalCategory()">+ Tambah Kategori</button>
+      `;
+
+      renderCategories(userData.categories);
+      itemGrid.innerHTML = '';
+      updateTotalPrice();
+    }
+
+    function navigateToCategory(path) {
+      currentPath = [...path];
+      const category = getCategoryByPath(path);
+      
+      if (!category) {
+        renderHome();
+        return;
+      }
+
+      updateBreadcrumb();
+      pageTitle.textContent = category.name;
+      pageSubtitle.textContent = `Total: ${formatPrice(getCategoryTotal(category))}`;
+
+      actionButtons.innerHTML = `
+        <button class="btn-add" onclick="openModalCategory()">+ Tambah Sub-Kategori</button>
+        <button class="btn-add" onclick="openModalItem()">+ Tambah Barang</button>
+      `;
+
+      const hasSubCategories = category.subcategories && category.subcategories.length > 0;
+      const hasItems = category.items && category.items.length > 0;
+
+      if (hasSubCategories) {
+        renderCategories(category.subcategories);
+      } else {
+        categoryGrid.innerHTML = '';
+      }
+
+      if (hasItems) {
+        renderItems(category.items);
+      } else {
+        itemGrid.innerHTML = '';
+      }
+
+      if (!hasSubCategories && !hasItems) {
+        showEmptyState();
+      } else {
+        hideEmptyState();
+      }
+
+      updateTotalPrice();
+    }
+
+    function getCategoryByPath(path) {
+      let current = { subcategories: userData.categories };
+      for (let i = 0; i < path.length; i++) {
+        const index = path[i];
+        if (!current.subcategories || !current.subcategories[index]) {
+          return null;
+        }
+        current = current.subcategories[index];
+      }
+      return current;
+    }
+
+    function updateBreadcrumb() {
+      if (currentPath.length === 0) {
+        breadcrumb.innerHTML = '<span class="breadcrumb-item active">Home</span>';
+        return;
+      }
+
+      let html = '<a class="breadcrumb-item" onclick="renderHome()">Home</a>';
+      let tempPath = [];
+
+      for (let i = 0; i < currentPath.length; i++) {
+        tempPath.push(currentPath[i]);
+        const category = getCategoryByPath(tempPath);
+        const isLast = i === currentPath.length - 1;
+        
+        html += '<span class="breadcrumb-separator">›</span>';
+        
+        if (isLast) {
+          html += `<span class="breadcrumb-item active">${category.name}</span>`;
+        } else {
+          const pathStr = JSON.stringify(tempPath);
+          html += `<a class="breadcrumb-item" onclick='navigateToCategory(${pathStr})'>${category.name}</a>`;
+        }
+      }
+
+      breadcrumb.innerHTML = html;
+    }
+
+    // Render Functions
+    function renderCategories(categories) {
+      if (!categories || categories.length === 0) {
+        categoryGrid.innerHTML = '';
+        return;
+      }
+
+      categoryGrid.innerHTML = categories.map((cat, index) => {
+        const total = getCategoryTotal(cat);
+        const coverStyle = cat.cover ? 
+          `background-image: url('${cat.cover}'); background-size: cover; background-position: center;` :
+          '';
+        
+        return `
+          <div class="category-card" onclick="navigateToCategoryIndex(${index})">
+            <div class="category-cover" style="${coverStyle}"></div>
+            <div class="category-info">
+              <div class="category-name">${cat.name}</div>
+              <div class="category-total">${formatPrice(total)}</div>
+            </div>
+            <div class="category-actions" onclick="event.stopPropagation()">
+              <button class="btn-icon" onclick="editCategory(${index})">Edit</button>
+              <button class="btn-icon" onclick="deleteCategory(${index})">Hapus</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function navigateToCategoryIndex(index) {
+      navigateToCategory([...currentPath, index]);
+    }
+
+    function renderItems(items) {
+      if (!items || items.length === 0) {
+        itemGrid.innerHTML = '';
+        return;
+      }
+
+      // Sort: unpurchased first, then purchased
+      const sortedItems = [...items].sort((a, b) => {
+        if (a.purchased === b.purchased) return 0;
+        return a.purchased ? 1 : -1;
+      });
+
+      itemGrid.innerHTML = sortedItems.map((item, index) => {
+        const originalIndex = items.indexOf(item);
+        const priorityClass = `priority-${item.priority}`;
+        const priorityText = {
+          'very-important': 'Sangat Penting',
+          'important': 'Penting',
+          'medium': 'Sedang',
+          'low': 'Rendah'
+        }[item.priority];
+
+        const imageStyle = item.image ? 
+          `background-image: url('${item.image}'); background-size: cover; background-position: center;` :
+          '';
+
+        return `
+          <div class="item-card ${item.purchased ? 'purchased' : ''}">
+            <div class="item-image" style="${imageStyle}"></div>
+            <div class="item-content">
+              <div class="item-header">
+                <div class="item-name">${item.name}</div>
+                <div class="priority-badge ${priorityClass}">${priorityText}</div>
+              </div>
+              ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
+              <div class="item-price">${formatPrice(item.price)}</div>
+              <div class="item-actions">
+                ${item.link ? 
+                  `<button class="btn-buy" onclick="window.open('${item.link}', '_blank', 'noopener,noreferrer')">Beli Sekarang</button>` :
+                  '<button class="btn-buy" disabled style="opacity: 0.5;">Tidak Ada Link</button>'
+                }
+              </div>
+              <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <label class="checkbox-purchased">
+                  <input type="checkbox" ${item.purchased ? 'checked' : ''} onchange="togglePurchased(${originalIndex})">
+                  <span>${item.purchased ? 'Sudah Dibeli' : 'Belum Dibeli'}</span>
+                </label>
+                <div>
+                  <button class="btn-icon" onclick="deleteItem(${originalIndex})" style="color: #C00000;">Hapus</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showEmptyState() {
+      emptyState.style.display = 'block';
+      categoryGrid.innerHTML = '';
+      itemGrid.innerHTML = '';
+    }
+
+    function hideEmptyState() {
+      emptyState.style.display = 'none';
+    }
+
+    // Modal Functions
+    function openModalCategory(editIndex = null) {
+      modalCategory.classList.add('active');
+      if (editIndex !== null) {
+        // Edit mode (not implemented in this version)
+      } else {
+        formCategory.reset();
+        document.getElementById('modalCategoryTitle').textContent = 'Tambah Kategori';
+        
+        // Reset preview
+        const preview = document.getElementById('categoryCoverPreview');
+        const placeholder = document.getElementById('categoryCoverPlaceholder');
+        preview.style.display = 'none';
+        placeholder.style.display = 'block';
+      }
+    }
+
+    function openModalItem() {
+      modalItem.classList.add('active');
+      formItem.reset();
+      
+      // Reset preview
+      const preview = document.getElementById('itemImagePreview');
+      const placeholder = document.getElementById('itemImagePlaceholder');
+      preview.style.display = 'none';
+      placeholder.style.display = 'block';
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove('active');
+    }
+
+    function handleSaveCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('categoryName').value.trim();
+      const coverPreview = document.getElementById('categoryCoverPreview');
+      const cover = coverPreview.style.display === 'block' ? coverPreview.src : '';
+
+      const newCategory = {
+        name,
+        cover,
+        subcategories: [],
+        items: []
+      };
+
+      if (currentPath.length === 0) {
+        userData.categories.push(newCategory);
+      } else {
+        const parent = getCategoryByPath(currentPath);
+        if (!parent.subcategories) parent.subcategories = [];
+        parent.subcategories.push(newCategory);
+      }
+
+      saveData();
+      closeModal(modalCategory);
+      
+      if (currentPath.length === 0) {
+        renderHome();
+      } else {
+        navigateToCategory(currentPath);
+      }
+    }
+
+    function handleSaveItem(e) {
+      e.preventDefault();
+      
+      const imagePreview = document.getElementById('itemImagePreview');
+      const image = imagePreview.style.display === 'block' ? imagePreview.src : '';
+
+      const newItem = {
+        name: document.getElementById('itemName').value.trim(),
+        description: document.getElementById('itemDescription').value.trim(),
+        price: parseInt(document.getElementById('itemPrice').value) || 0,
+        priority: document.getElementById('itemPriority').value,
+        link: document.getElementById('itemLink').value.trim(),
+        image: image,
+        purchased: false
+      };
+
+      const category = getCategoryByPath(currentPath);
+      if (!category.items) category.items = [];
+      category.items.push(newItem);
+
+      saveData();
+      closeModal(modalItem);
+      navigateToCategory(currentPath);
+    }
+
+    function editCategory(index) {
+      // Simple implementation - could be expanded
+      const category = currentPath.length === 0 ? 
+        userData.categories[index] : 
+        getCategoryByPath(currentPath).subcategories[index];
+      
+      const newName = prompt('Nama kategori baru:', category.name);
+      if (newName && newName.trim()) {
+        category.name = newName.trim();
+        saveData();
+        
+        if (currentPath.length === 0) {
+          renderHome();
+        } else {
+          navigateToCategory(currentPath);
+        }
+      }
+    }
+
+    function deleteCategory(index) {
+      const confirmDelete = confirm('Yakin ingin menghapus kategori ini? Semua sub-kategori dan barang di dalamnya akan terhapus.');
+      if (!confirmDelete) return;
+
+      if (currentPath.length === 0) {
+        userData.categories.splice(index, 1);
+      } else {
+        const parent = getCategoryByPath(currentPath);
+        parent.subcategories.splice(index, 1);
+      }
+
+      saveData();
+      
+      if (currentPath.length === 0) {
+        renderHome();
+      } else {
+        navigateToCategory(currentPath);
+      }
+    }
+
+    function deleteItem(index) {
+      const confirmDelete = confirm('Yakin ingin menghapus barang ini?');
+      if (!confirmDelete) return;
+
+      const category = getCategoryByPath(currentPath);
+      category.items.splice(index, 1);
+
+      saveData();
+      navigateToCategory(currentPath);
+    }
+
+    function togglePurchased(index) {
+      const category = getCategoryByPath(currentPath);
+      category.items[index].purchased = !category.items[index].purchased;
+
+      saveData();
+      navigateToCategory(currentPath);
+    }
+
+    // Helper Functions
+    function getCategoryTotal(category) {
+      let total = 0;
+
+      // Add items in this category
+      if (category.items) {
+        total += category.items.reduce((sum, item) => sum + (item.price || 0), 0);
+      }
+
+      // Add items in subcategories
+      if (category.subcategories) {
+        category.subcategories.forEach(sub => {
+          total += getCategoryTotal(sub);
+        });
+      }
+
+      return total;
+    }
+
+    function getTotalPrice() {
+      return userData.categories.reduce((sum, cat) => sum + getCategoryTotal(cat), 0);
+    }
+
+    function updateTotalPrice() {
+      const total = getTotalPrice();
+      totalPriceEl.textContent = formatPrice(total);
+    }
+
+    function formatPrice(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    function saveData() {
+      StorageManager.saveUserData(currentUser, userData);
+    }
+
+    // Initialize app
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b2fa08272eef902',t:'MTc2NjU3NDM2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
