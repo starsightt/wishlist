@@ -1572,6 +1572,7 @@
     let allRecords = [];
     let currentPath = [];
     let isLoading = false;
+    let sdkInitialized = false;
 
     // UI Helper Functions
     function showLoading() {
@@ -1692,23 +1693,34 @@
 
     // Initialize Data SDK
     async function initDataSDK() {
+      if (sdkInitialized) return true;
+      
       if (!window.dataSdk) {
-        showToast('Data SDK tidak tersedia', 'error');
         return false;
       }
 
-      const result = await window.dataSdk.init(dataHandler);
-      if (!result.isOk) {
-        showToast('Gagal menginisialisasi database', 'error');
+      try {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          return false;
+        }
+        sdkInitialized = true;
+        return true;
+      } catch (error) {
+        console.error('SDK Init Error:', error);
         return false;
       }
-
-      return true;
     }
 
     // Auth Functions
     async function handleLogin(e) {
       e.preventDefault();
+      
+      if (!sdkInitialized) {
+        showError('Database belum siap. Mohon refresh halaman ini.');
+        return;
+      }
+      
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value;
 
@@ -1716,7 +1728,10 @@
       const user = users.find(u => u.username === username && u.password === password);
 
       if (user) {
-        await login(username);
+        currentUser = username;
+        StorageManager.setCurrentUser(username);
+        showMainApp();
+        renderHome();
       } else {
         showError('Username atau password salah');
       }
@@ -1724,6 +1739,12 @@
 
     async function handleRegister(e) {
       e.preventDefault();
+      
+      if (!sdkInitialized) {
+        showError('Database belum siap. Mohon refresh halaman ini.');
+        return;
+      }
+      
       const username = document.getElementById('registerUsername').value.trim();
       const password = document.getElementById('registerPassword').value;
       const confirmPassword = document.getElementById('registerConfirmPassword').value;
@@ -1755,22 +1776,6 @@
         document.getElementById('loginForm').style.display = 'block';
         clearMessages();
       }, 1500);
-    }
-
-    async function login(username) {
-      showLoading();
-      currentUser = username;
-      StorageManager.setCurrentUser(username);
-      
-      const sdkReady = await initDataSDK();
-      if (!sdkReady) {
-        hideLoading();
-        return;
-      }
-
-      showMainApp();
-      renderHome();
-      hideLoading();
     }
 
     function handleLogout() {
@@ -2083,6 +2088,11 @@
     async function handleSaveCategory(e) {
       e.preventDefault();
       
+      if (!sdkInitialized) {
+        showToast('Database belum siap. Mohon refresh halaman.', 'error');
+        return;
+      }
+      
       if (allRecords.length >= 999) {
         showToast('Batas maksimal 999 data tercapai!', 'error');
         return;
@@ -2120,6 +2130,11 @@
     // Save Item
     async function handleSaveItem(e) {
       e.preventDefault();
+      
+      if (!sdkInitialized) {
+        showToast('Database belum siap. Mohon refresh halaman.', 'error');
+        return;
+      }
       
       if (allRecords.length >= 999) {
         showToast('Batas maksimal 999 data tercapai!', 'error');
@@ -2159,6 +2174,11 @@
 
     // Delete Category
     async function deleteCategory(backendId) {
+      if (!sdkInitialized) {
+        showToast('Database belum siap.', 'error');
+        return;
+      }
+      
       const record = allRecords.find(r => r.__backendId === backendId);
       if (!record) return;
 
@@ -2185,6 +2205,11 @@
 
     // Delete Item
     async function deleteItem(backendId) {
+      if (!sdkInitialized) {
+        showToast('Database belum siap.', 'error');
+        return;
+      }
+      
       const record = allRecords.find(r => r.__backendId === backendId);
       if (!record) return;
 
@@ -2201,6 +2226,11 @@
 
     // Toggle Purchased
     async function togglePurchased(backendId) {
+      if (!sdkInitialized) {
+        showToast('Database belum siap.', 'error');
+        return;
+      }
+      
       const record = allRecords.find(r => r.__backendId === backendId);
       if (!record) return;
 
@@ -2223,9 +2253,23 @@
     async function init() {
       loadDarkModePreference();
       
+      // Initialize SDK FIRST
+      showLoading();
+      const sdkReady = await initDataSDK();
+      hideLoading();
+      
+      if (!sdkReady) {
+        showToast('Gagal terhubung ke database. Silakan refresh halaman ini.', 'error');
+        showAuthPage();
+        setupEventListeners();
+        return;
+      }
+      
       const savedUser = StorageManager.getCurrentUser();
       if (savedUser) {
-        await login(savedUser);
+        currentUser = savedUser;
+        showMainApp();
+        renderHome();
       } else {
         showAuthPage();
       }
@@ -2286,5 +2330,5 @@
     // Start the app
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b30ee8db29ecde6',t:'MTc2NjU4ODA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b310159714c55de',t:'MTc2NjU4ODgxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
