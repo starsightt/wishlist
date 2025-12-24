@@ -1,10 +1,9 @@
-<!doctype html>
+<!doctype doctype>
 <html lang="id">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Wishlist - Personal Wishlist Manager</title>
-  <script src="/_sdk/data_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     body {
@@ -33,78 +32,6 @@
       width: 100%;
       min-height: 100%;
       overflow-y: auto;
-    }
-
-    /* Loading Overlay */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .loading-overlay.active {
-      display: flex;
-    }
-
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: white;
-      color: #333;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      display: none;
-      align-items: center;
-      gap: 12px;
-      z-index: 10000;
-      animation: slideInUp 0.3s ease-out;
-      max-width: 400px;
-    }
-
-    .toast.active {
-      display: flex;
-    }
-
-    .toast.success {
-      border-left: 4px solid #10b981;
-    }
-
-    .toast.error {
-      border-left: 4px solid #ef4444;
-    }
-
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     /* Login & Register Page */
@@ -186,12 +113,30 @@
       }
     }
 
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     @keyframes glow {
       0%, 100% {
         box-shadow: 0 0 5px rgba(139, 0, 0, 0.5), 0 0 10px rgba(139, 0, 0, 0.3);
       }
       50% {
         box-shadow: 0 0 20px rgba(139, 0, 0, 0.8), 0 0 30px rgba(139, 0, 0, 0.5);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
       }
     }
 
@@ -310,12 +255,6 @@
     .btn-primary:active {
       transform: translateY(0);
       box-shadow: 0 4px 15px rgba(74, 4, 4, 0.4);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
     }
 
     .auth-switch {
@@ -616,6 +555,44 @@
       background: linear-gradient(135deg, #6B0505 0%, #8B0000 100%);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(74, 4, 4, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #4A0404;
+      padding: 14px 28px;
+      border: 2px solid #4A0404;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #4A0404 0%, #6B0505 100%);
+      transition: left 0.4s ease;
+      z-index: -1;
+    }
+
+    .btn-secondary:hover::before {
+      left: 0;
+    }
+
+    .btn-secondary:hover {
+      color: white;
+      border-color: #4A0404;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(74, 4, 4, 0.3);
     }
 
     /* Category Grid */
@@ -1114,6 +1091,22 @@
       color: #333;
     }
 
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
     .form-group textarea {
       width: 100%;
       padding: 14px 16px;
@@ -1404,16 +1397,19 @@
       color: rgba(255, 255, 255, 0.8);
     }
 
+    body.dark-mode .modal-close {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    body.dark-mode .modal-close:hover {
+      color: white;
+    }
+
     body.dark-mode .password-toggle {
       color: rgba(255, 255, 255, 0.6);
     }
 
     body.dark-mode .password-toggle:hover {
-      color: white;
-    }
-
-    body.dark-mode .toast {
-      background: #1A0000;
       color: white;
     }
 
@@ -1437,15 +1433,12 @@
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body>
-  <div class="app-container"><!-- Loading Overlay -->
-   <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-spinner"></div>
-   </div><!-- Toast Notification -->
-   <div id="toast" class="toast"></div><!-- Auth Page -->
+  <div class="app-container"><!-- Auth Page -->
    <div id="authPage" class="auth-page">
     <div class="auth-card">
      <div class="auth-logo">
@@ -1567,53 +1560,6 @@
    </div>
   </div>
   <script>
-    // Global state
-    let currentUser = null;
-    let allRecords = [];
-    let currentPath = [];
-    let isLoading = false;
-    let sdkInitialized = false;
-
-    // UI Helper Functions
-    function showLoading() {
-      isLoading = true;
-      document.getElementById('loadingOverlay').classList.add('active');
-    }
-
-    function hideLoading() {
-      isLoading = false;
-      document.getElementById('loadingOverlay').classList.remove('active');
-    }
-
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast ${type} active`;
-      
-      setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
-    }
-
-    function showError(message) {
-      const errorMessage = document.getElementById('errorMessage');
-      errorMessage.textContent = message;
-      errorMessage.style.display = 'block';
-      document.getElementById('successMessage').style.display = 'none';
-    }
-
-    function showSuccess(message) {
-      const successMessage = document.getElementById('successMessage');
-      successMessage.textContent = message;
-      successMessage.style.display = 'block';
-      document.getElementById('errorMessage').style.display = 'none';
-    }
-
-    function clearMessages() {
-      document.getElementById('errorMessage').style.display = 'none';
-      document.getElementById('successMessage').style.display = 'none';
-    }
-
     // Toggle Password Visibility
     function togglePassword(inputId, button) {
       const input = document.getElementById(inputId);
@@ -1651,6 +1597,7 @@
       }
     }
 
+    // Load dark mode preference
     function loadDarkModePreference() {
       const isDark = localStorage.getItem('wishlist_dark_mode') === 'true';
       if (isDark) {
@@ -1660,7 +1607,7 @@
       }
     }
 
-    // Local Storage Manager (for user credentials only)
+    // Data Storage Manager
     class StorageManager {
       static getUsers() {
         return JSON.parse(localStorage.getItem('wishlist_users') || '[]');
@@ -1668,6 +1615,14 @@
 
       static saveUsers(users) {
         localStorage.setItem('wishlist_users', JSON.stringify(users));
+      }
+
+      static getUserData(username) {
+        return JSON.parse(localStorage.getItem(`wishlist_data_${username}`) || 'null');
+      }
+
+      static saveUserData(username, data) {
+        localStorage.setItem(`wishlist_data_${username}`, JSON.stringify(data));
       }
 
       static getCurrentUser() {
@@ -1683,401 +1638,110 @@
       }
     }
 
-    // Data SDK Handler
-    const dataHandler = {
-      onDataChanged(data) {
-        allRecords = data.filter(record => record.username === currentUser);
-        renderCurrentView();
-      }
-    };
+    // App State
+    let currentUser = null;
+    let userData = null;
+    let currentPath = [];
 
-    // Initialize Data SDK
-    async function initDataSDK() {
-      if (sdkInitialized) return true;
+    // UI Elements
+    const authPage = document.getElementById('authPage');
+    const mainApp = document.getElementById('mainApp');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const showRegisterBtn = document.getElementById('showRegister');
+    const showLoginBtn = document.getElementById('showLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const actionButtons = document.getElementById('actionButtons');
+    const categoryGrid = document.getElementById('categoryGrid');
+    const itemGrid = document.getElementById('itemGrid');
+    const emptyState = document.getElementById('emptyState');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalItem = document.getElementById('modalItem');
+    const formCategory = document.getElementById('formCategory');
+    const formItem = document.getElementById('formItem');
+    const btnAddCategory = document.getElementById('btnAddCategory');
+    const btnCancelCategory = document.getElementById('btnCancelCategory');
+    const btnCancelItem = document.getElementById('btnCancelItem');
+
+    // Initialize
+    function init() {
+      loadDarkModePreference();
       
-      // Wait for SDK to be available
-      let attempts = 0;
-      while (!window.dataSdk && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-      
-      if (!window.dataSdk) {
-        console.error('Data SDK tidak tersedia setelah 5 detik');
-        return false;
-      }
-
-      try {
-        const result = await window.dataSdk.init(dataHandler);
-        if (!result.isOk) {
-          console.error('SDK init gagal:', result.error);
-          return false;
-        }
-        sdkInitialized = true;
-        return true;
-      } catch (error) {
-        console.error('SDK Init Error:', error);
-        return false;
-      }
-    }
-
-    // Auth Functions
-    async function handleLogin(e) {
-      e.preventDefault();
-      
-      if (!sdkInitialized) {
-        showError('Database belum siap. Mohon refresh halaman ini.');
-        return;
-      }
-      
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value;
-
-      const users = StorageManager.getUsers();
-      const user = users.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        currentUser = username;
-        StorageManager.setCurrentUser(username);
-        showMainApp();
-        renderHome();
+      const savedUser = StorageManager.getCurrentUser();
+      if (savedUser) {
+        login(savedUser);
       } else {
-        showError('Username atau password salah');
+        showAuthPage();
       }
+      setupEventListeners();
     }
 
-    async function handleRegister(e) {
-      e.preventDefault();
-      
-      if (!sdkInitialized) {
-        showError('Database belum siap. Mohon refresh halaman ini.');
-        return;
-      }
-      
-      const username = document.getElementById('registerUsername').value.trim();
-      const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('registerConfirmPassword').value;
-
-      if (password !== confirmPassword) {
-        showError('Password tidak cocok');
-        return;
-      }
-
-      if (username.length < 3) {
-        showError('Username minimal 3 karakter');
-        return;
-      }
-
-      const users = StorageManager.getUsers();
-      if (users.find(u => u.username === username)) {
-        showError('Username sudah digunakan');
-        return;
-      }
-
-      users.push({ username, password });
-      StorageManager.saveUsers(users);
-
-      showSuccess('Akun berhasil dibuat! Silakan login');
-      document.getElementById('registerForm').reset();
-      
-      setTimeout(() => {
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
+    function setupEventListeners() {
+      // Auth
+      showRegisterBtn.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
         clearMessages();
-      }, 1500);
-    }
-
-    function handleLogout() {
-      StorageManager.clearCurrentUser();
-      currentUser = null;
-      allRecords = [];
-      currentPath = [];
-      showAuthPage();
-      document.getElementById('loginForm').reset();
-    }
-
-    function showAuthPage() {
-      document.getElementById('authPage').style.display = 'flex';
-      document.getElementById('mainApp').style.display = 'none';
-    }
-
-    function showMainApp() {
-      document.getElementById('authPage').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-    }
-
-    // Data Structure Helpers
-    function getUserCategories() {
-      return allRecords.filter(r => r.type === 'category' && !r.parent_path);
-    }
-
-    function getSubcategories(parentPath) {
-      return allRecords.filter(r => r.type === 'category' && r.parent_path === parentPath);
-    }
-
-    function getItems(categoryPath) {
-      return allRecords.filter(r => r.type === 'item' && r.parent_path === categoryPath);
-    }
-
-    function getCategoryByPath(path) {
-      const record = allRecords.find(r => r.parent_path === path && r.type === 'category');
-      return record;
-    }
-
-    function getCategoryTotal(categoryPath) {
-      let total = 0;
-      
-      // Items in this category
-      const items = getItems(categoryPath);
-      total += items.reduce((sum, item) => sum + (item.item_price || 0), 0);
-      
-      // Items in subcategories
-      const subcategories = getSubcategories(categoryPath);
-      subcategories.forEach(sub => {
-        const subPath = sub.parent_path ? `${sub.parent_path}/${sub.category_name}` : sub.category_name;
-        total += getCategoryTotal(subPath);
-      });
-      
-      return total;
-    }
-
-    function getTotalPrice() {
-      return allRecords
-        .filter(r => r.type === 'item')
-        .reduce((sum, item) => sum + (item.item_price || 0), 0);
-    }
-
-    // Navigation
-    function renderHome() {
-      currentPath = [];
-      updateBreadcrumb();
-      document.getElementById('pageTitle').textContent = 'Kategori Saya';
-      document.getElementById('pageSubtitle').textContent = 'Kelola wishlist Anda berdasarkan kategori';
-      
-      document.getElementById('actionButtons').innerHTML = `
-        <button class="btn-add" onclick="openModalCategory()">+ Tambah Kategori</button>
-      `;
-
-      const categories = getUserCategories();
-      renderCategories(categories, '');
-      document.getElementById('itemGrid').innerHTML = '';
-      updateTotalPrice();
-    }
-
-    function navigateToCategory(path) {
-      currentPath = path;
-      
-      const categories = getSubcategories(path);
-      const items = getItems(path);
-      const pathParts = path.split('/');
-      const categoryName = pathParts[pathParts.length - 1];
-      
-      updateBreadcrumb();
-      document.getElementById('pageTitle').textContent = categoryName;
-      document.getElementById('pageSubtitle').textContent = `Total: ${formatPrice(getCategoryTotal(path))}`;
-
-      document.getElementById('actionButtons').innerHTML = `
-        <button class="btn-add" onclick="openModalCategory()">+ Tambah Sub-Kategori</button>
-        <button class="btn-add" onclick="openModalItem()">+ Tambah Barang</button>
-      `;
-
-      if (categories.length > 0) {
-        renderCategories(categories, path);
-      } else {
-        document.getElementById('categoryGrid').innerHTML = '';
-      }
-
-      if (items.length > 0) {
-        renderItems(items);
-      } else {
-        document.getElementById('itemGrid').innerHTML = '';
-      }
-
-      if (categories.length === 0 && items.length === 0) {
-        showEmptyState();
-      } else {
-        hideEmptyState();
-      }
-
-      updateTotalPrice();
-    }
-
-    function updateBreadcrumb() {
-      const breadcrumb = document.getElementById('breadcrumb');
-      
-      if (!currentPath) {
-        breadcrumb.innerHTML = '<span class="breadcrumb-item active">Home</span>';
-        return;
-      }
-
-      let html = '<a class="breadcrumb-item" onclick="renderHome()">Home</a>';
-      
-      if (currentPath) {
-        const parts = currentPath.split('/');
-        let tempPath = '';
-        
-        parts.forEach((part, index) => {
-          tempPath = tempPath ? `${tempPath}/${part}` : part;
-          const isLast = index === parts.length - 1;
-          
-          html += '<span class="breadcrumb-separator">›</span>';
-          
-          if (isLast) {
-            html += `<span class="breadcrumb-item active">${part}</span>`;
-          } else {
-            html += `<a class="breadcrumb-item" onclick="navigateToCategory('${tempPath}')">${part}</a>`;
-          }
-        });
-      }
-
-      breadcrumb.innerHTML = html;
-    }
-
-    function renderCurrentView() {
-      if (!currentPath) {
-        renderHome();
-      } else {
-        navigateToCategory(currentPath);
-      }
-    }
-
-    // Render Functions
-    function renderCategories(categories, parentPath) {
-      const grid = document.getElementById('categoryGrid');
-      
-      if (!categories || categories.length === 0) {
-        grid.innerHTML = '';
-        return;
-      }
-
-      grid.innerHTML = categories.map(cat => {
-        const catPath = parentPath ? `${parentPath}/${cat.category_name}` : cat.category_name;
-        const total = getCategoryTotal(catPath);
-        const coverStyle = cat.category_cover ? 
-          `background-image: url('${cat.category_cover}'); background-size: cover; background-position: center;` :
-          '';
-        
-        return `
-          <div class="category-card" onclick="navigateToCategory('${catPath}')">
-            <div class="category-cover" style="${coverStyle}"></div>
-            <div class="category-info">
-              <div class="category-name">${cat.category_name}</div>
-              <div class="category-total">${formatPrice(total)}</div>
-            </div>
-            <div class="category-actions" onclick="event.stopPropagation()">
-              <button class="btn-icon" onclick="deleteCategory('${cat.__backendId}')">Hapus</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderItems(items) {
-      const grid = document.getElementById('itemGrid');
-      
-      if (!items || items.length === 0) {
-        grid.innerHTML = '';
-        return;
-      }
-
-      const sortedItems = [...items].sort((a, b) => {
-        if (a.item_purchased === b.item_purchased) return 0;
-        return a.item_purchased ? 1 : -1;
       });
 
-      grid.innerHTML = sortedItems.map(item => {
-        const priorityClass = `priority-${item.item_priority}`;
-        const priorityText = {
-          'very-important': 'Sangat Penting',
-          'important': 'Penting',
-          'medium': 'Sedang',
-          'low': 'Rendah'
-        }[item.item_priority];
+      showLoginBtn.addEventListener('click', () => {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        clearMessages();
+      });
 
-        const imageStyle = item.item_image ? 
-          `background-image: url('${item.item_image}'); background-size: cover; background-position: center;` :
-          '';
+      loginForm.addEventListener('submit', handleLogin);
+      registerForm.addEventListener('submit', handleRegister);
+      btnLogout.addEventListener('click', handleLogout);
 
-        return `
-          <div class="item-card ${item.item_purchased ? 'purchased' : ''}">
-            <div class="item-image" style="${imageStyle}"></div>
-            <div class="item-content">
-              <div class="item-header">
-                <div class="item-name">${item.item_name}</div>
-                <div class="priority-badge ${priorityClass}">${priorityText}</div>
-              </div>
-              ${item.item_description ? `<div class="item-description">${item.item_description}</div>` : ''}
-              <div class="item-price">${formatPrice(item.item_price)}</div>
-              <div class="item-actions">
-                ${item.item_link ? 
-                  `<button class="btn-buy" onclick="window.open('${item.item_link}', '_blank', 'noopener,noreferrer')">Beli Sekarang</button>` :
-                  '<button class="btn-buy" disabled style="opacity: 0.5;">Tidak Ada Link</button>'
-                }
-              </div>
-              <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <label class="checkbox-purchased">
-                  <input type="checkbox" ${item.item_purchased ? 'checked' : ''} onchange="togglePurchased('${item.__backendId}')">
-                  <span>${item.item_purchased ? 'Sudah Dibeli' : 'Belum Dibeli'}</span>
-                </label>
-                <div>
-                  <button class="btn-icon" onclick="deleteItem('${item.__backendId}')" style="color: #C00000;">Hapus</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+      // Dark Mode
+      const btnDarkMode = document.getElementById('btnDarkMode');
+      if (btnDarkMode) {
+        btnDarkMode.addEventListener('click', toggleDarkMode);
+      }
+
+      // Modals
+      btnAddCategory.addEventListener('click', () => openModalCategory());
+      btnCancelCategory.addEventListener('click', () => closeModal(modalCategory));
+      btnCancelItem.addEventListener('click', () => closeModal(modalItem));
+      formCategory.addEventListener('submit', handleSaveCategory);
+      formItem.addEventListener('submit', handleSaveItem);
+
+      // Image uploads
+      const categoryCoverInput = document.getElementById('categoryCoverInput');
+      const itemImageInput = document.getElementById('itemImageInput');
+
+      categoryCoverInput.addEventListener('change', (e) => {
+        handleImageUpload(e, 'categoryCoverPreview', 'categoryCoverPlaceholder');
+      });
+
+      itemImageInput.addEventListener('change', (e) => {
+        handleImageUpload(e, 'itemImagePreview', 'itemImagePlaceholder');
+      });
+
+      // Close modal on background click
+      modalCategory.addEventListener('click', (e) => {
+        if (e.target === modalCategory) closeModal(modalCategory);
+      });
+      modalItem.addEventListener('click', (e) => {
+        if (e.target === modalItem) closeModal(modalItem);
+      });
     }
 
-    function showEmptyState() {
-      document.getElementById('emptyState').style.display = 'block';
-    }
-
-    function hideEmptyState() {
-      document.getElementById('emptyState').style.display = 'none';
-    }
-
-    function updateTotalPrice() {
-      const total = getTotalPrice();
-      document.getElementById('totalPrice').textContent = formatPrice(total);
-    }
-
-    function formatPrice(amount) {
-      return 'Rp ' + amount.toLocaleString('id-ID');
-    }
-
-    // Modal Functions
-    function openModalCategory() {
-      document.getElementById('modalCategory').classList.add('active');
-      document.getElementById('formCategory').reset();
-      
-      const preview = document.getElementById('categoryCoverPreview');
-      const placeholder = document.getElementById('categoryCoverPlaceholder');
-      preview.style.display = 'none';
-      placeholder.style.display = 'block';
-    }
-
-    function openModalItem() {
-      document.getElementById('modalItem').classList.add('active');
-      document.getElementById('formItem').reset();
-      
-      const preview = document.getElementById('itemImagePreview');
-      const placeholder = document.getElementById('itemImagePlaceholder');
-      preview.style.display = 'none';
-      placeholder.style.display = 'block';
-    }
-
-    function closeModal(modal) {
-      modal.classList.remove('active');
-    }
-
-    // Handle Image Upload
+    // Handle image upload and convert to base64
     function handleImageUpload(event, previewId, placeholderId) {
       const file = event.target.files[0];
       if (!file) return;
 
+      // Check file size (max 2MB)
       if (file.size > 2 * 1024 * 1024) {
-        showToast('Ukuran gambar terlalu besar! Maksimal 2MB', 'error');
+        alert('Ukuran gambar terlalu besar! Maksimal 2MB');
         return;
       }
 
@@ -2093,251 +1757,486 @@
       reader.readAsDataURL(file);
     }
 
-    // Save Category
-    async function handleSaveCategory(e) {
+    // Auth Functions
+    function handleLogin(e) {
       e.preventDefault();
-      
-      if (!sdkInitialized) {
-        showToast('Database belum siap. Mohon refresh halaman.', 'error');
-        return;
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const users = StorageManager.getUsers();
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        login(username);
+      } else {
+        showError('Username atau password salah');
       }
-      
-      if (allRecords.length >= 999) {
-        showToast('Batas maksimal 999 data tercapai!', 'error');
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showError('Password tidak cocok');
         return;
       }
 
-      showLoading();
+      const users = StorageManager.getUsers();
+      if (users.find(u => u.username === username)) {
+        showError('Username sudah digunakan');
+        return;
+      }
 
+      users.push({ username, password });
+      StorageManager.saveUsers(users);
+
+      // Initialize user data
+      const initialData = {
+        categories: [],
+        totalSpent: 0
+      };
+      StorageManager.saveUserData(username, initialData);
+
+      showSuccess('Akun berhasil dibuat! Silakan login');
+      registerForm.reset();
+      setTimeout(() => {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        clearMessages();
+      }, 1500);
+    }
+
+    function login(username) {
+      currentUser = username;
+      userData = StorageManager.getUserData(username) || {
+        categories: [],
+        totalSpent: 0
+      };
+      StorageManager.setCurrentUser(username);
+      showMainApp();
+      renderHome();
+    }
+
+    function handleLogout() {
+      StorageManager.clearCurrentUser();
+      currentUser = null;
+      userData = null;
+      currentPath = [];
+      showAuthPage();
+      loginForm.reset();
+    }
+
+    function showAuthPage() {
+      authPage.style.display = 'flex';
+      mainApp.style.display = 'none';
+    }
+
+    function showMainApp() {
+      authPage.style.display = 'none';
+      mainApp.style.display = 'block';
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+    }
+
+    function clearMessages() {
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+    }
+
+    // Navigation
+    function renderHome() {
+      currentPath = [];
+      updateBreadcrumb();
+      pageTitle.textContent = 'Kategori Saya';
+      pageSubtitle.textContent = 'Kelola wishlist Anda berdasarkan kategori';
+      
+      actionButtons.innerHTML = `
+        <button class="btn-add" onclick="openModalCategory()">+ Tambah Kategori</button>
+      `;
+
+      renderCategories(userData.categories);
+      itemGrid.innerHTML = '';
+      updateTotalPrice();
+    }
+
+    function navigateToCategory(path) {
+      currentPath = [...path];
+      const category = getCategoryByPath(path);
+      
+      if (!category) {
+        renderHome();
+        return;
+      }
+
+      updateBreadcrumb();
+      pageTitle.textContent = category.name;
+      pageSubtitle.textContent = `Total: ${formatPrice(getCategoryTotal(category))}`;
+
+      actionButtons.innerHTML = `
+        <button class="btn-add" onclick="openModalCategory()">+ Tambah Sub-Kategori</button>
+        <button class="btn-add" onclick="openModalItem()">+ Tambah Barang</button>
+      `;
+
+      const hasSubCategories = category.subcategories && category.subcategories.length > 0;
+      const hasItems = category.items && category.items.length > 0;
+
+      if (hasSubCategories) {
+        renderCategories(category.subcategories);
+      } else {
+        categoryGrid.innerHTML = '';
+      }
+
+      if (hasItems) {
+        renderItems(category.items);
+      } else {
+        itemGrid.innerHTML = '';
+      }
+
+      if (!hasSubCategories && !hasItems) {
+        showEmptyState();
+      } else {
+        hideEmptyState();
+      }
+
+      updateTotalPrice();
+    }
+
+    function getCategoryByPath(path) {
+      let current = { subcategories: userData.categories };
+      for (let i = 0; i < path.length; i++) {
+        const index = path[i];
+        if (!current.subcategories || !current.subcategories[index]) {
+          return null;
+        }
+        current = current.subcategories[index];
+      }
+      return current;
+    }
+
+    function updateBreadcrumb() {
+      if (currentPath.length === 0) {
+        breadcrumb.innerHTML = '<span class="breadcrumb-item active">Home</span>';
+        return;
+      }
+
+      let html = '<a class="breadcrumb-item" onclick="renderHome()">Home</a>';
+      let tempPath = [];
+
+      for (let i = 0; i < currentPath.length; i++) {
+        tempPath.push(currentPath[i]);
+        const category = getCategoryByPath(tempPath);
+        const isLast = i === currentPath.length - 1;
+        
+        html += '<span class="breadcrumb-separator">›</span>';
+        
+        if (isLast) {
+          html += `<span class="breadcrumb-item active">${category.name}</span>`;
+        } else {
+          const pathStr = JSON.stringify(tempPath);
+          html += `<a class="breadcrumb-item" onclick='navigateToCategory(${pathStr})'>${category.name}</a>`;
+        }
+      }
+
+      breadcrumb.innerHTML = html;
+    }
+
+    // Render Functions
+    function renderCategories(categories) {
+      if (!categories || categories.length === 0) {
+        categoryGrid.innerHTML = '';
+        return;
+      }
+
+      categoryGrid.innerHTML = categories.map((cat, index) => {
+        const total = getCategoryTotal(cat);
+        const coverStyle = cat.cover ? 
+          `background-image: url('${cat.cover}'); background-size: cover; background-position: center;` :
+          '';
+        
+        return `
+          <div class="category-card" onclick="navigateToCategoryIndex(${index})">
+            <div class="category-cover" style="${coverStyle}"></div>
+            <div class="category-info">
+              <div class="category-name">${cat.name}</div>
+              <div class="category-total">${formatPrice(total)}</div>
+            </div>
+            <div class="category-actions" onclick="event.stopPropagation()">
+              <button class="btn-icon" onclick="editCategory(${index})">Edit</button>
+              <button class="btn-icon" onclick="deleteCategory(${index})">Hapus</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function navigateToCategoryIndex(index) {
+      navigateToCategory([...currentPath, index]);
+    }
+
+    function renderItems(items) {
+      if (!items || items.length === 0) {
+        itemGrid.innerHTML = '';
+        return;
+      }
+
+      // Sort: unpurchased first, then purchased
+      const sortedItems = [...items].sort((a, b) => {
+        if (a.purchased === b.purchased) return 0;
+        return a.purchased ? 1 : -1;
+      });
+
+      itemGrid.innerHTML = sortedItems.map((item, index) => {
+        const originalIndex = items.indexOf(item);
+        const priorityClass = `priority-${item.priority}`;
+        const priorityText = {
+          'very-important': 'Sangat Penting',
+          'important': 'Penting',
+          'medium': 'Sedang',
+          'low': 'Rendah'
+        }[item.priority];
+
+        const imageStyle = item.image ? 
+          `background-image: url('${item.image}'); background-size: cover; background-position: center;` :
+          '';
+
+        return `
+          <div class="item-card ${item.purchased ? 'purchased' : ''}">
+            <div class="item-image" style="${imageStyle}"></div>
+            <div class="item-content">
+              <div class="item-header">
+                <div class="item-name">${item.name}</div>
+                <div class="priority-badge ${priorityClass}">${priorityText}</div>
+              </div>
+              ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
+              <div class="item-price">${formatPrice(item.price)}</div>
+              <div class="item-actions">
+                ${item.link ? 
+                  `<button class="btn-buy" onclick="window.open('${item.link}', '_blank', 'noopener,noreferrer')">Beli Sekarang</button>` :
+                  '<button class="btn-buy" disabled style="opacity: 0.5;">Tidak Ada Link</button>'
+                }
+              </div>
+              <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <label class="checkbox-purchased">
+                  <input type="checkbox" ${item.purchased ? 'checked' : ''} onchange="togglePurchased(${originalIndex})">
+                  <span>${item.purchased ? 'Sudah Dibeli' : 'Belum Dibeli'}</span>
+                </label>
+                <div>
+                  <button class="btn-icon" onclick="deleteItem(${originalIndex})" style="color: #C00000;">Hapus</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showEmptyState() {
+      emptyState.style.display = 'block';
+      categoryGrid.innerHTML = '';
+      itemGrid.innerHTML = '';
+    }
+
+    function hideEmptyState() {
+      emptyState.style.display = 'none';
+    }
+
+    // Modal Functions
+    function openModalCategory(editIndex = null) {
+      modalCategory.classList.add('active');
+      if (editIndex !== null) {
+        // Edit mode (not implemented in this version)
+      } else {
+        formCategory.reset();
+        document.getElementById('modalCategoryTitle').textContent = 'Tambah Kategori';
+        
+        // Reset preview
+        const preview = document.getElementById('categoryCoverPreview');
+        const placeholder = document.getElementById('categoryCoverPlaceholder');
+        preview.style.display = 'none';
+        placeholder.style.display = 'block';
+      }
+    }
+
+    function openModalItem() {
+      modalItem.classList.add('active');
+      formItem.reset();
+      
+      // Reset preview
+      const preview = document.getElementById('itemImagePreview');
+      const placeholder = document.getElementById('itemImagePlaceholder');
+      preview.style.display = 'none';
+      placeholder.style.display = 'block';
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove('active');
+    }
+
+    function handleSaveCategory(e) {
+      e.preventDefault();
       const name = document.getElementById('categoryName').value.trim();
       const coverPreview = document.getElementById('categoryCoverPreview');
       const cover = coverPreview.style.display === 'block' ? coverPreview.src : '';
 
-      const parentPath = currentPath || '';
-      
       const newCategory = {
-        username: currentUser,
-        type: 'category',
-        parent_path: parentPath,
-        category_name: name,
-        category_cover: cover,
-        created_at: new Date().toISOString()
+        name,
+        cover,
+        subcategories: [],
+        items: []
       };
 
-      const result = await window.dataSdk.create(newCategory);
-      
-      hideLoading();
-
-      if (result.isOk) {
-        showToast('Kategori berhasil ditambahkan!');
-        closeModal(document.getElementById('modalCategory'));
+      if (currentPath.length === 0) {
+        userData.categories.push(newCategory);
       } else {
-        showToast('Gagal menambahkan kategori', 'error');
+        const parent = getCategoryByPath(currentPath);
+        if (!parent.subcategories) parent.subcategories = [];
+        parent.subcategories.push(newCategory);
+      }
+
+      saveData();
+      closeModal(modalCategory);
+      
+      if (currentPath.length === 0) {
+        renderHome();
+      } else {
+        navigateToCategory(currentPath);
       }
     }
 
-    // Save Item
-    async function handleSaveItem(e) {
+    function handleSaveItem(e) {
       e.preventDefault();
       
-      if (!sdkInitialized) {
-        showToast('Database belum siap. Mohon refresh halaman.', 'error');
-        return;
-      }
-      
-      if (allRecords.length >= 999) {
-        showToast('Batas maksimal 999 data tercapai!', 'error');
-        return;
-      }
-
-      showLoading();
-
       const imagePreview = document.getElementById('itemImagePreview');
       const image = imagePreview.style.display === 'block' ? imagePreview.src : '';
 
       const newItem = {
-        username: currentUser,
-        type: 'item',
-        parent_path: currentPath,
-        item_name: document.getElementById('itemName').value.trim(),
-        item_description: document.getElementById('itemDescription').value.trim(),
-        item_price: parseInt(document.getElementById('itemPrice').value) || 0,
-        item_priority: document.getElementById('itemPriority').value,
-        item_link: document.getElementById('itemLink').value.trim(),
-        item_image: image,
-        item_purchased: false,
-        created_at: new Date().toISOString()
+        name: document.getElementById('itemName').value.trim(),
+        description: document.getElementById('itemDescription').value.trim(),
+        price: parseInt(document.getElementById('itemPrice').value) || 0,
+        priority: document.getElementById('itemPriority').value,
+        link: document.getElementById('itemLink').value.trim(),
+        image: image,
+        purchased: false
       };
 
-      const result = await window.dataSdk.create(newItem);
-      
-      hideLoading();
+      const category = getCategoryByPath(currentPath);
+      if (!category.items) category.items = [];
+      category.items.push(newItem);
 
-      if (result.isOk) {
-        showToast('Barang berhasil ditambahkan!');
-        closeModal(document.getElementById('modalItem'));
+      saveData();
+      closeModal(modalItem);
+      navigateToCategory(currentPath);
+    }
+
+    function editCategory(index) {
+      // Simple implementation - could be expanded
+      const category = currentPath.length === 0 ? 
+        userData.categories[index] : 
+        getCategoryByPath(currentPath).subcategories[index];
+      
+      const newName = prompt('Nama kategori baru:', category.name);
+      if (newName && newName.trim()) {
+        category.name = newName.trim();
+        saveData();
+        
+        if (currentPath.length === 0) {
+          renderHome();
+        } else {
+          navigateToCategory(currentPath);
+        }
+      }
+    }
+
+    function deleteCategory(index) {
+      const confirmDelete = confirm('Yakin ingin menghapus kategori ini? Semua sub-kategori dan barang di dalamnya akan terhapus.');
+      if (!confirmDelete) return;
+
+      if (currentPath.length === 0) {
+        userData.categories.splice(index, 1);
       } else {
-        showToast('Gagal menambahkan barang', 'error');
-      }
-    }
-
-    // Delete Category
-    async function deleteCategory(backendId) {
-      if (!sdkInitialized) {
-        showToast('Database belum siap.', 'error');
-        return;
-      }
-      
-      const record = allRecords.find(r => r.__backendId === backendId);
-      if (!record) return;
-
-      const categoryPath = record.parent_path ? `${record.parent_path}/${record.category_name}` : record.category_name;
-      
-      // Check if has children
-      const hasChildren = allRecords.some(r => r.parent_path && r.parent_path.startsWith(categoryPath));
-      
-      if (hasChildren) {
-        showToast('Hapus dulu semua sub-kategori dan barang di dalamnya', 'error');
-        return;
+        const parent = getCategoryByPath(currentPath);
+        parent.subcategories.splice(index, 1);
       }
 
-      showLoading();
-      const result = await window.dataSdk.delete(record);
-      hideLoading();
-
-      if (result.isOk) {
-        showToast('Kategori berhasil dihapus!');
-      } else {
-        showToast('Gagal menghapus kategori', 'error');
-      }
-    }
-
-    // Delete Item
-    async function deleteItem(backendId) {
-      if (!sdkInitialized) {
-        showToast('Database belum siap.', 'error');
-        return;
-      }
+      saveData();
       
-      const record = allRecords.find(r => r.__backendId === backendId);
-      if (!record) return;
-
-      showLoading();
-      const result = await window.dataSdk.delete(record);
-      hideLoading();
-
-      if (result.isOk) {
-        showToast('Barang berhasil dihapus!');
-      } else {
-        showToast('Gagal menghapus barang', 'error');
-      }
-    }
-
-    // Toggle Purchased
-    async function togglePurchased(backendId) {
-      if (!sdkInitialized) {
-        showToast('Database belum siap.', 'error');
-        return;
-      }
-      
-      const record = allRecords.find(r => r.__backendId === backendId);
-      if (!record) return;
-
-      showLoading();
-      
-      const updatedRecord = {
-        ...record,
-        item_purchased: !record.item_purchased
-      };
-
-      const result = await window.dataSdk.update(updatedRecord);
-      hideLoading();
-
-      if (!result.isOk) {
-        showToast('Gagal mengupdate status', 'error');
-      }
-    }
-
-    // Initialize App
-    async function init() {
-      loadDarkModePreference();
-      
-      // Initialize SDK FIRST
-      showLoading();
-      const sdkReady = await initDataSDK();
-      hideLoading();
-      
-      if (!sdkReady) {
-        showToast('Gagal terhubung ke database. Silakan refresh halaman ini.', 'error');
-        showAuthPage();
-        setupEventListeners();
-        return;
-      }
-      
-      const savedUser = StorageManager.getCurrentUser();
-      if (savedUser) {
-        currentUser = savedUser;
-        showMainApp();
+      if (currentPath.length === 0) {
         renderHome();
       } else {
-        showAuthPage();
+        navigateToCategory(currentPath);
       }
-      
-      setupEventListeners();
     }
 
-    function setupEventListeners() {
-      // Auth
-      document.getElementById('showRegister').addEventListener('click', () => {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        clearMessages();
-      });
+    function deleteItem(index) {
+      const confirmDelete = confirm('Yakin ingin menghapus barang ini?');
+      if (!confirmDelete) return;
 
-      document.getElementById('showLogin').addEventListener('click', () => {
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-        clearMessages();
-      });
+      const category = getCategoryByPath(currentPath);
+      category.items.splice(index, 1);
 
-      document.getElementById('loginForm').addEventListener('submit', handleLogin);
-      document.getElementById('registerForm').addEventListener('submit', handleRegister);
-      document.getElementById('btnLogout').addEventListener('click', handleLogout);
-
-      // Dark Mode
-      document.getElementById('btnDarkMode').addEventListener('click', toggleDarkMode);
-
-      // Modals
-      document.getElementById('btnCancelCategory').addEventListener('click', () => 
-        closeModal(document.getElementById('modalCategory'))
-      );
-      document.getElementById('btnCancelItem').addEventListener('click', () => 
-        closeModal(document.getElementById('modalItem'))
-      );
-      
-      document.getElementById('formCategory').addEventListener('submit', handleSaveCategory);
-      document.getElementById('formItem').addEventListener('submit', handleSaveItem);
-
-      // Image uploads
-      document.getElementById('categoryCoverInput').addEventListener('change', (e) => {
-        handleImageUpload(e, 'categoryCoverPreview', 'categoryCoverPlaceholder');
-      });
-
-      document.getElementById('itemImageInput').addEventListener('change', (e) => {
-        handleImageUpload(e, 'itemImagePreview', 'itemImagePlaceholder');
-      });
-
-      // Close modal on background click
-      document.getElementById('modalCategory').addEventListener('click', (e) => {
-        if (e.target.id === 'modalCategory') closeModal(e.target);
-      });
-      document.getElementById('modalItem').addEventListener('click', (e) => {
-        if (e.target.id === 'modalItem') closeModal(e.target);
-      });
+      saveData();
+      navigateToCategory(currentPath);
     }
 
-    // Start the app
+    function togglePurchased(index) {
+      const category = getCategoryByPath(currentPath);
+      category.items[index].purchased = !category.items[index].purchased;
+
+      saveData();
+      navigateToCategory(currentPath);
+    }
+
+    // Helper Functions
+    function getCategoryTotal(category) {
+      let total = 0;
+
+      // Add items in this category
+      if (category.items) {
+        total += category.items.reduce((sum, item) => sum + (item.price || 0), 0);
+      }
+
+      // Add items in subcategories
+      if (category.subcategories) {
+        category.subcategories.forEach(sub => {
+          total += getCategoryTotal(sub);
+        });
+      }
+
+      return total;
+    }
+
+    function getTotalPrice() {
+      return userData.categories.reduce((sum, cat) => sum + getCategoryTotal(cat), 0);
+    }
+
+    function updateTotalPrice() {
+      const total = getTotalPrice();
+      totalPriceEl.textContent = formatPrice(total);
+    }
+
+    function formatPrice(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    function saveData() {
+      StorageManager.saveUserData(currentUser, userData);
+    }
+
+    // Initialize app
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b310920a2d1fe14',t:'MTc2NjU4OTEzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b30e8b8906fcde6',t:'MTc2NjU4NzgwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
